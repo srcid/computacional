@@ -65,7 +65,7 @@ def instances():
     
     file.close()
 
-    yield s,d,c
+    yield ns,nd,s,d,c
 
 if __name__ == '__main__':
   shapes = {
