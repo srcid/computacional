@@ -58,7 +58,7 @@ def instances():
   for instance in reversed([ f for f in (Path() / "instances").glob("*.txt") ]):
     file = instance.open("r")
     
-    ns, nd = tuple([ float(n) for n in file.readline().split(' ') ])
+    ns, nd = tuple([ int(n) for n in file.readline().split(' ') ])
     s = [ e for e in map(float, file.readline().split(' ')) ]
     d = [ e for e in map(float, file.readline().split(' ')) ]
     c = [ [ e for e in map(float, arr.split(' ')) ] for arr in  file.readlines() ]
