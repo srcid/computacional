@@ -55,7 +55,7 @@ def instance_generator(shapes, random_state=None):
       file.close()
 
 def instances():
-  for instance in (Path() / "instances").glob("*.txt"):
+  for instance in reversed([ f for f in (Path() / "instances").glob("*.txt") ]):
     file = instance.open("r")
     
     ns, nd = tuple([ float(n) for n in file.readline().split(' ') ])
