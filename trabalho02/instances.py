@@ -28,7 +28,7 @@ def create_instances(shapes: Dict[int,Tuple[int,int]], random_state: int = None)
       stock = np.random.randint(1, 1000, size=n_suppliers)
 
       if demmand.sum() > stock.sum():
-        stock = stock + (demmand.sum() - stock.sum())
+        stock = stock + (demmand.sum() - stock.sum()) / n_suppliers
 
       file.write(' '.join(map(str,stock)) + '\n')
       file.write(' '.join(map(str,demmand)) + '\n')
