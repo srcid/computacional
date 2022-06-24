@@ -19,7 +19,7 @@ def create_instances(shapes: Dict[int,Tuple[int,int]], random_state: int = None)
   n_instances = len(shapes)
   
   for i in range(n_instances):
-    with (output_folder / f'{i}.txt').open('w') as file:
+    with (output_folder / f'{i}_instance.txt').open('w') as file:
       n_suppliers, n_consumers = shapes[i]
       n_cost = n_suppliers * n_consumers
       cost = np.random.rand(n_cost) * np.random.randint(1,100,n_cost)
@@ -37,7 +37,7 @@ def create_instances(shapes: Dict[int,Tuple[int,int]], random_state: int = None)
       file.close()
 
 def get_instances() -> Generator[Tuple[List[float], List[float], List[List[float]]], None, None]:
-  for instance in reversed(list((Path() / "teste").glob("*.txt"))):
+  for instance in reversed(list((Path() / "instances").glob("*_instance.txt"))):
     with instance.open("r") as file:
       S = np.loadtxt(file, max_rows=1)
       D = np.loadtxt(file, max_rows=1)
