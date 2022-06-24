@@ -1,12 +1,13 @@
 import numpy as np
 from pathlib import Path
+from typing import *
 
 # A primeira linha contém os numero de suppliers e o número de consummers, nessa ordem
 # Em seguida, na segunda linha, estarão os valores dos estoques
 # Depois, os valores de demanda dos clientes
 # Finalmente a matriz com os valores de custo C_ij = custo de S_i para D_ij
 
-def instance_generator(shapes, random_state=None):
+def create_instances(shapes: Dict[int,Tuple[int,int]], random_state: int = None) -> None:
   if random_state != None:
     np.random.seed(random_state)
 
@@ -18,12 +19,10 @@ def instance_generator(shapes, random_state=None):
   n_instances = len(shapes)
   
   for i in range(n_instances):
-    
-    with open(f'instances/{i}.txt', 'w') as file:
+    with (output_folder / f'{i}.txt').open('w') as file:
       n_suppliers, n_consumers = shapes[i]
       n_cost = n_suppliers * n_consumers
       cost = np.random.rand(n_cost) * np.random.randint(1,100,n_cost)
-      np.round(cost, 5, out=cost)
       cost = cost.reshape((n_suppliers, n_consumers))
       demmand = np.random.randint(1, 1000, size=n_consumers)
       stock = np.random.randint(1, 1000, size=n_suppliers)
@@ -31,47 +30,27 @@ def instance_generator(shapes, random_state=None):
       if demmand.sum() > stock.sum():
         stock = stock + (demmand.sum() - stock.sum())
 
-      file.write(f'{n_suppliers} {n_consumers}\n')
-      
-      for s in range(n_suppliers):
-        if (s == n_suppliers-1):
-          file.write(str(stock[s]) + '\n')
-        else:
-          file.write(str(stock[s]) + ' ')
-      
-      for d in range(n_consumers):
-        if (d == n_consumers-1):
-          file.write(str(demmand[d]) + '\n')
-        else:
-          file.write(str(demmand[d]) + ' ')
-      
-      for s in range(n_suppliers):
-        for c in range(n_consumers):
-          if c == n_consumers-1:
-            file.write(f'{cost[s][c]}\n')
-          else:
-            file.write(f'{cost[s][c]} ')
-      
+      file.write(' '.join(map(str,stock)) + '\n')
+      file.write(' '.join(map(str,demmand)) + '\n')
+      file.write('\n'.join(map(lambda l: ' '.join(map(str,l)), cost)))
+
       file.close()
 
-def instances():
-  for instance in reversed(list((Path() / "instances").glob("*.txt"))):
-    file = instance.open("r")
-    
-    ns, nd = tuple([ int(n) for n in file.readline().split(' ') ])
-    s = list(map(float, file.readline().split(' ')))
-    d = list(map(float, file.readline().split(' ')))
-    c = [ list(map(float, arr.split(' '))) for arr in  file.readlines() ]
-    
-    file.close()
+def get_instances() -> Generator[Tuple[List[float], List[float], List[List[float]]], None, None]:
+  for instance in reversed(list((Path() / "teste").glob("*.txt"))):
+    with instance.open("r") as file:
+      S = np.loadtxt(file, max_rows=1)
+      D = np.loadtxt(file, max_rows=1)
+      C = np.loadtxt(file)
 
-    yield ns,nd,s,d,c
+      file.close()
+
+      yield (S,D,C)
+
 
 if __name__ == '__main__':
-  shapes = {
-    0: (100,100),
-    1: (200,150),
-    2: (150,200)
-  }
-
-  instance_generator(shapes=shapes, random_state=42)
+  create_instances({0: (3,3), 1: (3,2)},42)
+  for S,D,C in get_instances():
+    print(S)
+    print(D)
+    print(C)
