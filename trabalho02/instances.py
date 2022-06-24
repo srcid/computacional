@@ -7,7 +7,7 @@ from typing import *
 # Depois, os valores de demanda dos clientes
 # Finalmente a matriz com os valores de custo C_ij = custo de S_i para D_ij
 
-def create_instances(shapes: Dict[int,Tuple[int,int]], random_state: int = None) -> None:
+def create_instances(shapes: List[Tuple[int,int]], random_state: int = None) -> None:
   if random_state != None:
     np.random.seed(random_state)
 
@@ -49,7 +49,7 @@ def get_instances() -> Generator[Tuple[List[float], List[float], List[List[float
 
 
 if __name__ == '__main__':
-  create_instances({0: (3,3), 1: (3,2)},42)
+  create_instances([(3,3),(3,2)],42)
   for S,D,C in get_instances():
     print(S)
     print(D)
