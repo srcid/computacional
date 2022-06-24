@@ -55,13 +55,13 @@ def instance_generator(shapes, random_state=None):
       file.close()
 
 def instances():
-  for instance in reversed([ f for f in (Path() / "instances").glob("*.txt") ]):
+  for instance in reversed(list((Path() / "instances").glob("*.txt"))):
     file = instance.open("r")
     
     ns, nd = tuple([ int(n) for n in file.readline().split(' ') ])
-    s = [ e for e in map(float, file.readline().split(' ')) ]
-    d = [ e for e in map(float, file.readline().split(' ')) ]
-    c = [ [ e for e in map(float, arr.split(' ')) ] for arr in  file.readlines() ]
+    s = list(map(float, file.readline().split(' ')))
+    d = list(map(float, file.readline().split(' ')))
+    c = [ list(map(float, arr.split(' '))) for arr in  file.readlines() ]
     
     file.close()
 
