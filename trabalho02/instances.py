@@ -1,6 +1,7 @@
 import numpy as np
 from pathlib import Path
 from typing import *
+from math import ceil
 
 # A primeira linha contém os numero de suppliers e o número de consummers, nessa ordem
 # Em seguida, na segunda linha, estarão os valores dos estoques
@@ -23,12 +24,13 @@ def create_instances(shapes: List[Tuple[int,int]], random_state: int = None) -> 
       n_suppliers, n_consumers = shapes[i]
       n_cost = n_suppliers * n_consumers
       cost = np.random.rand(n_cost) * np.random.randint(1,100,n_cost)
+      np.round(cost, 2, out=cost)
       cost = cost.reshape((n_suppliers, n_consumers))
       demmand = np.random.randint(1, 1000, size=n_consumers)
       stock = np.random.randint(1, 1000, size=n_suppliers)
 
       if demmand.sum() > stock.sum():
-        stock = stock + (demmand.sum() - stock.sum()) / n_suppliers
+        stock = stock + ceil((demmand.sum() - stock.sum()) / n_suppliers)
 
       file.write(' '.join(map(str,stock)) + '\n')
       file.write(' '.join(map(str,demmand)) + '\n')
