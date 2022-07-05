@@ -39,7 +39,7 @@ def create_instances(shapes: List[Tuple[int,int]], random_state: int = None) -> 
       file.close()
 
 def get_instances() -> Generator[Tuple[List[float], List[float], List[List[float]]], None, None]:
-  for instance in reversed(list((Path() / "instances").glob("*_instance.txt"))):
+  for instance in list((Path() / "instances").glob("*_instance.txt")):
     with instance.open("r") as file:
       S = np.loadtxt(file, max_rows=1)
       D = np.loadtxt(file, max_rows=1)
